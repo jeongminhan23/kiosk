@@ -7,13 +7,14 @@ fun main() {
     println("맛있당카페에 오신 것을 환영합니다.")
 
     showMenu()
+
 }
 
 fun showMenu() {
     println("아래 메뉴판을 보시고 메뉴를 선택해 주세요")
     println("[1]커피 [2]음료 [3]디저트 [4]장바구니확인 [0]종료")
 
-    try { // 숫자를 입력해야하는데 문자를 입력했을때 다시 입력할 수 있도록 try-catch 구문으로 예외를 처리
+    try { // 숫자를 입력해야하는데 문자를 입력했을때 다시 입력할 수 있도록 try-catch 구문으로 예외를 처리 (Lv4미션)
         val input = readLine()!!.toInt()
 
         when (input) {
@@ -79,39 +80,74 @@ fun showMenu() {
 
 fun coffeMenu(x: Int): MenuItem {
     return when (x) {
-        1 -> MenuItem("아메리카노", 3000)
-        2 -> MenuItem("카페모카", 3500)
-        3 -> MenuItem("카페라떼", 4000)
-        4 -> MenuItem("에스프레소", 4500)
-        else -> MenuItem("", 0)
+        1 -> CoffeeItem("아메리카노",3000)
+        2 -> CoffeeItem("카페모카", 3500)
+        3 -> CoffeeItem("카페라떼", 4000)
+        4 -> CoffeeItem("에스프레소", 4500)
+        else -> CoffeeItem("", 0)
     }
 }
 
 fun drinkMenu(y: Int): MenuItem {
     return when (y) {
-        1 -> MenuItem("오렌지주스", 2500)
-        2 -> MenuItem("애플주스", 2500)
-        3 -> MenuItem("아이스티", 2000)
-        4 -> MenuItem("청포도에이드", 3000)
-        else -> MenuItem("", 0)
+        1 -> DrinkItem("오렌지주스", 2500)
+        2 -> DrinkItem("애플주스", 2500)
+        3 -> DrinkItem("아이스티", 2000)
+        4 -> DrinkItem("청포도에이드", 3000)
+        else -> DrinkItem("", 0)
     }
 }
 
 fun dessertMenu(z: Int): MenuItem {
     return when (z) {
-        1 -> MenuItem("치즈케이크", 4500)
-        2 -> MenuItem("망고빙수", 7000)
-        3 -> MenuItem("애플파이", 6500)
-        4 -> MenuItem("소금빵", 4000)
-        else -> MenuItem("", 0)
+        1 -> DessertItem("치즈케이크", 4500)
+        2 -> DessertItem("망고빙수", 7000)
+        3 -> DessertItem("애플파이", 6500)
+        4 -> DessertItem("소금빵", 4000)
+        else -> DessertItem("", 0)
     }
 }
 
-class MenuItem(val name: String, val price: Int)
+// CoffeeItem, DrinkItem, DessertItem을 상속시키기 위해 추상클래스 MenuItem을 만들었다 (Lv3미션)
+abstract class MenuItem(){
+    var name = ""
+    var price = 0
+    abstract fun displayInfo()
+}
 
+class CoffeeItem():MenuItem(){
+    override fun displayInfo(){
+        println("${name} 입니다. 가격은 ${price} 입니다.")
+    }
+    constructor(name : String, price : Int) : this(){
+        super.name = name
+        super.price = price
+    }
+}
+
+
+class DrinkItem():MenuItem(){
+    override fun displayInfo(){
+        println("${name} 입니다. 가격은 ${price} 입니다.")
+    }
+    constructor(name : String, price : Int) : this(){
+        super.name = name
+        super.price = price
+    }
+}
+
+class DessertItem():MenuItem(){
+    override fun displayInfo(){
+        println("${name} 입니다. 가격은 ${price} 입니다.")
+    }
+    constructor(name : String, price : Int) : this(){
+        super.name = name
+        super.price = price
+    }
+}
 
 // 장바구니에 담은 후 메뉴화면으로 돌아간다.
-val shoppingCart = mutableListOf<MenuItem>() //수정 가능한 배열인 빈 장바구니를 하나 만들어 준다.
+val shoppingCart = arrayListOf<MenuItem>() //수정 가능한 배열인 빈 장바구니를 하나 만들어 준다.
 
 fun addToCart(item: MenuItem) {
     shoppingCart.add(item) // 장바구니에 아이템을 넣고,
@@ -160,7 +196,7 @@ fun pay(putMoney: Int) {
     }
     val count = putMoney - totalPrice
 
-    if (count >= 0) {
+    if (count >= 0) { // 구매 가능한 상태를 확인(Lv4미션)
 
         val now = LocalDateTime.now() // java.time 패키지를 사용해 LocalDateTime.now() 사용하여 현재 시간을 얻어오고
         val formattedNow = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) // 시간정보를 원하는 형식으로 출력하도록 지정한다.
