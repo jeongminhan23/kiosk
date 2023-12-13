@@ -7,7 +7,6 @@ import kotlin.concurrent.thread
 
 
 fun main() {
-    println("맛있당카페에 오신 것을 환영합니다.")
 
     thread {showMenu()} // 스레드를 생성해서
 
@@ -45,6 +44,7 @@ val orderFormEmoji = "📃"
 
 // 메뉴판 메소드 입니다.
 fun showMenu() {
+    println("맛있당카페에 오신 것을 환영합니다.")
     println("아래 메뉴판을 보시고 메뉴를 선택해 주세요")
     println("[1]커피 [2]음료 [3]디저트 [4]장바구니확인 [0]종료") // 대분류를 보여준다.
 
@@ -188,6 +188,7 @@ fun pay(putMoney: Int) {
             println("결제가 완료되었습니다. 거스름돈은 ${count}원 입니다.") // 결제완료 안내문구와 거스름돈을 알려주고
             println("맛있당카페를 이용해주셔서 감사합니다 $laughingEmoji (${formattedNow})") // 최종인사와 결제된 시각을 표시한다. (Lv5)
             shoppingCart.clear() // 결제 완료 후 장바구니 비우기
+            showMenu() // 다시 처음으로 간다 (계속 순환)
         }
     } else { // 만약 거스름돈이 0보다 작다면 -> 결제 불가 안내
         println("넣은 금액은 ${putMoney}원으로 ${Math.abs(count)}원이 부족해서 주문할 수 없습니다.") // 거스름돈인 count의 Math.abs메소드를 이용해 절대값을 보여준다.
